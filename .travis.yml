@@ -4,7 +4,7 @@ services:
   - docker
 
 script:
-- make build
+- hack/travis_wait_log/travis_wait_log make build
 
 after_success:
 - docker images --digests
