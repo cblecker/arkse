@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-if docker images -q ${1}
+if docker images -q "${1}"; then
   echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
   docker push "${1}"
 else
