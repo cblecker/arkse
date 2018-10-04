@@ -7,9 +7,9 @@ RUNARGS=
 default: build
 
 build:
-	docker build -t $(REGISTRY_HOST)/$(NAMESPACE)/$(IMAGE):latest .
+	docker build --ulimit nofile=90000:90000 -t $(REGISTRY_HOST)/$(NAMESPACE)/$(IMAGE):latest .
 
-push: build
+push:
 	@hack/docker_push.sh $(REGISTRY_HOST)/$(NAMESPACE)/$(IMAGE):latest
 
 run: build
