@@ -1,0 +1,9 @@
+// ark-install.txt
+//
+@ShutdownOnFailedCommand 1
+@NoPromptForPassword 1
+login anonymous
+force_install_dir /opt/ark
+app_update 376030 validate // Install ARK: Survival Evolved Dedicated Server
+workshop_download_item 346110 731604991 // Structures Plus (Open Source)
+quit
