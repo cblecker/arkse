@@ -13,11 +13,20 @@ RUN apt-get update && apt-get install -y \
     steamcmd --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-RUN /usr/games/steamcmd +login anonymous +app_update 376030 +quit
+RUN mkdir -p /opt/ark
+RUN /usr/games/steamcmd +login anonymous +force_install_dir /opt/ark \
+    +app_update 376030 +quit
 
 ####################
 FROM ubuntu:18.04
 LABEL maintainer "Christoph Blecker <admin@toph.ca>"
 
+# Create and use unprivileged user
+RUN adduser --disabled-password --gecos "" --uid 1077 ark
+USER ark
+
 # Copy Ark from builder
-COPY --from=builder ["/root/.steam/SteamApps/common/ARK Survival Evolved Dedicated Server","/opt/ark"]
+COPY --chown=ark --from=builder /opt/ark /opt/ark
+
+# Set working directory
+WORKDIR /opt/ark/ShooterGame/Binaries/Linux
