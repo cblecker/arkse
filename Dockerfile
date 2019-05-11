@@ -16,11 +16,11 @@ RUN dpkg --add-architecture i386 && \
     && rm -rf /var/lib/apt/lists/*
 
 # Create and use unprivileged user
-RUN adduser --disabled-password --gecos "" ark
+RUN adduser --disabled-password --gecos "" --gid 0 ark
 
 # Create directory and set permissions
 RUN mkdir /opt/ark && \
-    chown ark:root /opt/ark && \
+    chown ark:0 /opt/ark && \
     chmod 775 /opt/ark
 
 # Drop unneded permissions
