@@ -15,11 +15,9 @@ RUN dpkg --add-architecture i386 && \
     steamcmd --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# Create and use unprivileged user
-RUN adduser --disabled-password --gecos "" --gid 0 ark
-
-# Create directory and set initial permissions
-RUN mkdir /opt/ark && \
+# Create unprivileged user and working directory
+RUN adduser --disabled-password --gecos "" --gid 0 ark && \
+    mkdir /opt/ark && \
     chown ark:0 /opt/ark
 
 # Drop unneded permissions
@@ -28,11 +26,10 @@ USER ark
 # Copy in install script
 COPY ark-install.txt /home/ark/
 
-# Download ARK: Survival Evolved Dedicated Server
-RUN /usr/games/steamcmd +runscript /home/ark/ark-install.txt
-
-# Ensure permissions are uniform after installation
-RUN chmod -R g=u /opt/ark
+# Download ARK: Survival Evolved Dedicated Server, ensuring permissions are
+# uniform after installation.
+RUN /usr/games/steamcmd +runscript /home/ark/ark-install.txt && \
+    chmod -R g=u /opt/ark
 
 # Set working directory
 WORKDIR /opt/ark
