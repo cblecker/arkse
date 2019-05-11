@@ -16,19 +16,24 @@ RUN dpkg --add-architecture i386 && \
     && rm -rf /var/lib/apt/lists/*
 
 # Create and use unprivileged user
-RUN adduser --disabled-password --gecos "" --uid 1077 ark
+RUN adduser --disabled-password --gecos "" ark
 
 # Create directory and set permissions
-RUN mkdir /opt/ark && chown ark:ark /opt/ark
+RUN mkdir /opt/ark && \
+    chown ark:root /opt/ark && \
+    chmod 775 /opt/ark
 
 # Drop unneded permissions
 USER ark
 
 # Copy in install script
-COPY --chown=1077 ark-install.txt /home/ark/
+COPY ark-install.txt /home/ark/
 
 # Download ARK: Survival Evolved Dedicated Server
 RUN /usr/games/steamcmd +runscript /home/ark/ark-install.txt
 
 # Set working directory
-WORKDIR /opt/ark/ShooterGame/Binaries/Linux
+WORKDIR /opt/ark/
+
+# Use ShooterGameServer as the default entrypoint
+ENTRYPOINT /opt/ark/ShooterGame/Binaries/Linux/ShooterGameServer
